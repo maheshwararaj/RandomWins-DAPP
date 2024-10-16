@@ -16,9 +16,7 @@ const Navbar = () => {
             setAddress(signer.getAddress());
             const message = "Sign this message to verify your account";
             const signature = await signer.signMessage(message);
-            // addr.textContent= await address;
-            // let bal=await provider.getBalance(address)
-            // console.log(ethers.utils.formatEther(bal));
+            
         } catch (error) {
             console.error('Error connecting to MetaMask:', error);
         }
