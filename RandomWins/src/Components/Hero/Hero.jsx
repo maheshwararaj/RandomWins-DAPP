@@ -15,19 +15,28 @@ const Hero = () => {
   useEffect(()=>{
     const ws = new WebSocket('ws://localhost:8080');
 
+    
     ws.onmessage = (event) => {
         const data = JSON.parse(event.data);
   
         if (data.type === 'gamestate') {
+
           setGameActive(data.isGameActive);
-          setLocked(false);
-          setTimeLeft(data.timeLeft);
           if(!data.isGameActive){
             setWinnerActive(true)
+            setLocked(false);
+            setSelected("")
           }
-        } else if (data.type === 'time-left') {
+          else{
+            setLocked(localStorage.getItem("locked"))
+          }
+        } 
+        
+        else if (data.type === 'time-left') {
           setTimeLeft(data.timeLeft);
-        } else if (data.type === 'game-over') {
+        } 
+        
+        else if (data.type === 'game-over') {
           setGameActive(false);
           
         //   setMessage(data.message);
@@ -45,26 +54,35 @@ const Hero = () => {
       ws.onerror = (error) => {
         console.error('WebSocket error:', error);
       };
-  
+      
       // Cleanup WebSocket connection on component unmount
       return () => {
         ws.close();
       };
 
-
-
+     
   },[])
   
+  useEffect(()=>{
+    if(localStorage.getItem("locked") != null){
+      setLocked(localStorage.getItem("locked"));
+    }
+    else{
+      localStorage.setItem("locked",false)
+    }
+  },[])
+
   const handleChoiceLock = ()=>{
         
         if(!locked){
             setLocked(!locked)
+            localStorage.setItem("locked",true);
         }
             
         
   }
 
-  const [selected,setSelected] = useState("monkey");
+  const [selected,setSelected] = useState("");
   const [locked,setLocked] = useState(false)
   const [timeLeft, setTimeLeft] = useState(null);
   const [gameActive, setGameActive] = useState(false);
