@@ -4,11 +4,10 @@ import Hero from './Components/Hero/Hero'
 import { useState } from 'react'
 
 function App() {
-  const [wallet,setWallet] = useState("#lkjljlsk99oi87987dfdsfdf")
   return (
     
     <>
-      <Navbar wallet={wallet}/>
+      <Navbar wallet/>
       <Hero/>
     </>
   )
