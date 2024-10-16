@@ -23,14 +23,15 @@ const Hero = () => {
         if (data.type === 'gamestate') {
 
           setGameActive(data.isGameActive);
+          
           if(!data.isGameActive){
             setWinnerActive(true)
-            setLocked(false);
             setSelected("")
           }
           else{
-            setLocked(localStorage.getItem("locked"))
+            setLocked(false)
           }
+          
         } 
         
         else if (data.type === 'time-left') {
@@ -65,19 +66,19 @@ const Hero = () => {
   },[])
   
   useEffect(()=>{
-    if(localStorage.getItem("locked") != null){
-      setLocked(localStorage.getItem("locked"));
-    }
-    else{
-      localStorage.setItem("locked",false)
-    }
+    // if(localStorage.getItem("locked") != null){
+    //   setLocked(localStorage.getItem("locked"));
+    // }
+    // else{
+    //   localStorage.setItem("locked",false)
+    // }
   },[])
   
   const handleChoiceLock = (num)=>{
         
         if(!locked){
             setLocked(!locked)
-            placeBet(num);
+
         }
 
         
@@ -113,6 +114,7 @@ const contract=ethers.Contract(contractAddress,contractABI,provider);
 
   return (
     <div className='hero'>
+
         <div className="topbar">
             <h3 >Luck decides, <span className='yellow'>Skill is on break.</span> </h3>
             <h3>{timeLeft?"Time Left : " : "Wait"}  
@@ -121,7 +123,7 @@ const contract=ethers.Contract(contractAddress,contractABI,provider);
         </div>
 
         
-        <div className={gameActive&&!locked?"options-card":"disable-div options-card"}>
+        <div className={gameActive&&!locked ? "options-card":"disable-div options-card"}>
             {
                 choices.map(choice=>{
                     return(
