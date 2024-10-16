@@ -79,7 +79,7 @@ const contract=ethers.Contract(contractAddress,contractABI,provider);
     }
     
 
- 
+  }
   const handleChoiceLock = ()=>{
 
         if(!locked) setLocked(!locked)
