@@ -9,8 +9,10 @@ const Navbar = () => {
   const onConnect=async ()=>{
     if (typeof window.ethereum !== 'undefined') {
         try {
+
             let addr= await window.ethereum.request({method:"eth_requestAccounts"});
             setAddress(addr[0]);
+           
         } catch (error) {
             console.error('Error connecting to MetaMask:', error);
         }
