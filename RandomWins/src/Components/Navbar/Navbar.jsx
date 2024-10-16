@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react'
 import './Navbar.css'
 const Navbar = () => {
 
-  useEffect(()=>{
-    
-  },[])
+  
   const [address,setAddress]=useState(null);
+  
   const onConnect=async ()=>{
     if (typeof window.ethereum !== 'undefined') {
         try {
