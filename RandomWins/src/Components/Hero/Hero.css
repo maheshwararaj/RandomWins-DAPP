@@ -1,0 +1,62 @@
+.hero{
+    width: 70%;
+    margin: auto;
+    margin-top: 30px;
+    display: flex;
+    gap: 50px;
+    flex-direction: column;   
+    border-radius: 10px;
+}
+
+.topbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+}
+
+h3{
+    font-size: 24px;
+}
+.time{
+    color: var(--clr-secondary);    
+}
+
+.options-card{
+    display: flex;
+    gap: 20px;
+    justify-content: space-between;
+    
+}
+
+
+.lock{
+
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+}
+.disable-div{
+    pointer-events: none;
+}
+.ethamount{
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+.locked{
+    border: none;
+    outline: none;
+    background-color: #a0a0a0;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--clr-primary);
+    border-radius: 5px;
+    cursor: pointer;
+}

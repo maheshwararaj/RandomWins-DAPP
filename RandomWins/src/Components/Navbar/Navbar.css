@@ -1,0 +1,25 @@
+.navbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 60px;
+}
+h1{
+    color: white;
+    font-size:36px;
+    text-shadow: 0px 0px 10px #000000;
+}
+h1 span{
+    color: var(--clr-secondary);
+}
+
+.right{
+    display: flex;
+    gap: 20px;
+    font-size: 20px;
+    color: white;
+}
+
+li:hover{
+    color: var(--clr-secondary);
+}

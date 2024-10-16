@@ -1,0 +1,72 @@
+.previousgames{
+   
+    width: 100%;
+    height: 300px;
+    padding: 10px;
+    border-radius: 10px;
+    overflow-y: scroll;
+    margin-bottom: 50px;
+}
+
+#title{
+    color: white;
+    font-size: 28px;
+}
+
+.table{
+
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 20px;
+}
+.table p{
+    color: rgb(175, 161, 161);
+    font-size: 16px;
+}
+.list-table-format{
+
+    padding: 15px 20px;
+    display: grid;
+    align-items: center;
+    gap: 10px;
+    grid-template-columns: 1fr 2fr 1fr 1fr 1fr 1fr 1fr;
+    font-size: 19px; 
+    color: white;
+     
+}
+.header{
+    position: sticky;
+    top: -10px;
+    color: rgb(182, 170, 170);
+    background-color: var(--clr-primary);
+    
+}
+
+.gamelist{
+    display: flex;
+    flex-direction: column-reverse;
+}
+.list-table-format:nth-child(even){
+    background-color: rgba(150, 150, 150, 0.196);
+}
+
+/* scrollbar */
+
+.previousgames::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Track */
+
+
+/* Handle */
+.previousgames::-webkit-scrollbar-thumb {
+  background: #ffffff7c;
+  border-radius: 6px;
+}
+
+/* Handle on hover */
+.previousgames::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
