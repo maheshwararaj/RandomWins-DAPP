@@ -6,8 +6,6 @@ import PreviousGames from '../PreviousGames/PreviousGames'
 import { choices } from '../../assets/assets'
 import Winner from '../Winner/Winner'
 
-// make the button unclickable after locking the choice
-// make the choices unselectable after locking a choice
 
 
 const Hero = () => {
@@ -17,6 +15,7 @@ const Hero = () => {
 
     
     ws.onmessage = (event) => {
+
         const data = JSON.parse(event.data);
   
         if (data.type === 'gamestate') {
@@ -37,13 +36,6 @@ const Hero = () => {
           setTimeLeft(data.timeLeft);
         } 
         
-        else if (data.type === 'game-over') {
-          setGameActive(false);
-          
-        //   setMessage(data.message);
-        } else if (data.type === 'confirmation') {
-        //   setMessage(`You selected: ${data.choice + 1}. ${data.message}`);
-        }
       };
 
 
@@ -64,26 +56,14 @@ const Hero = () => {
      
   },[])
   
-  useEffect(()=>{
-    // if(localStorage.getItem("locked") != null){
-    //   setLocked(localStorage.getItem("locked"));
-    // }
-    // else{
-    //   localStorage.setItem("locked",false)
-    // }
-  },[])
-
+ 
   const handleChoiceLock = ()=>{
-        
-        if(!locked){
-            setLocked(!locked)
-            
-        }
-            
-        
+
+        if(!locked) setLocked(!locked)
+
   }
 
-  const [selected,setSelected] = useState("");
+  const [selected,setSelected] = useState(null);
   const [locked,setLocked] = useState(false)
   const [timeLeft, setTimeLeft] = useState(null);
   const [gameActive, setGameActive] = useState(false);
@@ -117,12 +97,11 @@ const Hero = () => {
         </div>
         <hr />
         <h2 id='title'> Previous<span className='yellow'> Games</span></h2>
+
         <PreviousGames/>
 
-        {!gameActive && winnerActive?
-            <Winner id={1} setWinnerActive={setWinnerActive}/>
-            :""
-
+        {!gameActive && winnerActive  ?
+            <Winner id={1} setWinnerActive={setWinnerActive}/> : ""
         }
         
     </div>
