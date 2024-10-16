@@ -27,8 +27,9 @@ const Hero = () => {
             setSelected("")
           }
           else{
-            setLocked(false)
+            setLocked("false")
           }
+         
           
         } 
         
@@ -61,8 +62,8 @@ const Hero = () => {
  
   const handleChoiceLock = ()=>{
 
-        if(!locked){
-          setLocked(!locked)
+        if(locked=="false"){
+          setLocked("true")
           placeBet(selected)
         } 
 
@@ -70,14 +71,13 @@ const Hero = () => {
   }
 
   const [selected,setSelected] = useState(null);
-  const [locked,setLocked] = useState(false)
+  const [locked,setLocked] = useState("false");
   const [timeLeft, setTimeLeft] = useState(null);
   const [gameActive, setGameActive] = useState(false);
   const [winnerActive,setWinnerActive] = useState(true)
 
   return (
     <div className='hero'>
-
         <div className="topbar">
             <h3 >Luck decides, <span className='yellow'>Skill is on break.</span> </h3>
             <h3>{timeLeft?"Time Left : " : "Wait"}  
@@ -86,7 +86,7 @@ const Hero = () => {
         </div>
 
         
-        <div className={gameActive&&!locked ? "options-card":"disable-div options-card"}>
+        <div className={locked=="false" && gameActive  ? "options-card":"disable-div options-card"}>
             {
                 choices.map(choice=>{
                     return(
@@ -99,12 +99,12 @@ const Hero = () => {
         
             <div className='ethamount'> <span >Bet Price : </span> <p style={{color:"var(--clr-secondary)"}}> &nbsp;  0.01 ETH</p><img src={eth} style={{width:"20px"}} /></div>
             <p>Game Id : <span className='yellow'>103</span> </p>
-            <button style={{minWidth:"160px"}} className={locked || !gameActive ? 'locked' : 'button'} onClick={handleChoiceLock()}>{locked ? "Locked" : "Lock Choice"}</button>
+            <button style={{minWidth:"160px"}} className={ locked == "true" ||  !gameActive ? 'locked' : 'button'} onClick={()=>handleChoiceLock()}>{locked=="true" ? "Locked" : "Lock Choice"}</button>
         </div>
         <hr />
         <h2 id='title'> Previous<span className='yellow'> Games</span></h2>
 
-        <PreviousGames/>
+        <PreviousGames />
 
         {!gameActive && winnerActive  ?
             <Winner id={1} setWinnerActive={setWinnerActive}/> : ""
