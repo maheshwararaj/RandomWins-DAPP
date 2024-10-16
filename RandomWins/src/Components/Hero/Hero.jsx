@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './Hero.css'
+import {ethers} from 'ethers'
 import Card from '../Card/Card'
 import eth from "../../assets/eth.png"
 import PreviousGames from '../PreviousGames/PreviousGames'
@@ -56,10 +57,33 @@ const Hero = () => {
      
   },[])
   
+
+
+  //To Interect with Deployed contract 
+const provider=new ethers.providers.Web3Provider(window.ethereum);
+const contractAddress="0x65Cad9685add8277BB86f081C39bda00a240f5c6";
+const contractABI=[
+    "function addBet(uint8 _id) payable external"
+];
+const signer=provider.getSigner();
+const contract=ethers.Contract(contractAddress,contractABI,provider);
+  const placeBet=async (num)=>{
+    try{
+      const amount=ethers.util.parseEther("0.01");
+      const contractSign=contract.connect(signer);
+      const tx=await contractSign.addBet(num,{value:amount});
+      await tx.wait();
+    }
+    catch(e){
+      console.error(e);
+    }
+    
+
  
   const handleChoiceLock = ()=>{
 
         if(!locked) setLocked(!locked)
+
 
   }
 
@@ -93,7 +117,7 @@ const Hero = () => {
         
             <div className='ethamount'> <span >Bet Price : </span> <p style={{color:"var(--clr-secondary)"}}> &nbsp;  0.01 ETH</p><img src={eth} style={{width:"20px"}} /></div>
             <p>Game Id : <span className='yellow'>103</span> </p>
-            <button style={{minWidth:"160px"}} className={locked || !gameActive ? 'locked' : 'button'} onClick={handleChoiceLock}>{locked ? "Locked" : "Lock Choice"}</button>
+            <button style={{minWidth:"160px"}} className={locked || !gameActive ? 'locked' : 'button'} onClick={handleChoiceLock()}>{locked ? "Locked" : "Lock Choice"}</button>
         </div>
         <hr />
         <h2 id='title'> Previous<span className='yellow'> Games</span></h2>
