@@ -19,7 +19,7 @@ const PreviousGames = () => {
         {
           previousGames.map(game=>{
             return(
-              <div className="list-table-format">
+              <div className="list-table-format" key={game.id}>
                 <p>{game.id}</p>
                 <div style={{display:"flex",alignItems:"center",gap:"10px"}}><img src={choices[game.winner-1].image} style={{width:"40px",height:"40px",borderRadius:"4px"}} alt="" />{choices[game.winner-1].name}</div>
                 <p>{game.profit}%</p>
