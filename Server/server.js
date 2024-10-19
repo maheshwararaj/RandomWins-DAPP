@@ -1,28 +1,43 @@
-const{ethers}=require('ethers');
+// BackEnd Here
+const {toEther,contract}=require('./ether');
 
-//TO CONNECT WITH INFURA
-const network=process.env.ETHEREUM_NETWORK;
-const provider=new ethers.InfuraProvider(network,process.env.INFURA_API_KEY);
-const signer=new ethers.Wallet(process.env.SIGNER_PRIVATE_KEY).connect(provider);
-
-//TO CONNECT WITH REMIX DEPLOYED CONTRACT
-const contractAddress="0x65Cad9685add8277BB86f081C39bda00a240f5c6";
-const contractABI=[
-    "function addBet(uint8 _id) payable external",
-    "function generateNumber() external",
-    "event NewBet(address indexed player,uint amount,uint8 number)",
-    "event GameResult(uint8 luckyNumber, uint256 totalBetAmount, uint256 winners, uint256 Share)"
-];
-const contract=new ethers.Contract(contractAddress,contractABI,provider);
-
-const gameResult=async ()=>{
-    try{
-        const signContract=contract.connect(signer);
-        await signContract.generateNumber();
+const gameData=(luckyNumber,totalBetAmount,winners,share)=>{
+    console.log(share);
+    return{
+        luckyNumber:luckyNumber,
+        totalBetAmount:totalBetAmount,
+        winners:winners,
+        share:share
     }
-    catch(e){
-        console.error(e);
-    }
-    
-
 }
+
+let currentData;
+let currentBets;
+const betStats=[0,0,0,0];
+
+const gameStats=(address,betAmount,selectedNumber,noOfbets)=>{
+    betStats[selectedNumber-1]++;
+    currentBets=noOfbets;
+};
+contract.on("NewBet",(a,b,c,d)=>{
+    // console.log(`Player Address ${a} BetAmount ${toEther(b)} Number ${c} noOfbets ${d}`);
+    currentStats=gameStats(Number(a),toEther(b),Number(c),Number(d));
+    console.log(currentBets);
+})
+contract.on("GameResult", (a, b, c, d) => {
+    // console.log(`luckyNumber ${a} totalBetAmount ${toEther(b)} winners ${c} share ${toEther(d)}`);
+    gameData(Number(a),toEther(b),Number(c),toEther(d));
+    resetBets();
+
+    // console.log(currentData.luckyNumber);
+});
+function resetBets(){
+    for(let i=0;i<4;i++){
+        betStats[i]=0;
+    }
+}
+
+module.exports={currentBets,betStats,currentData}
+
+
+

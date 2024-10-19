@@ -1,4 +1,6 @@
 const WebSocket = require('ws');
+const {gameResult}=require('./ether');
+const {gameEnd}=require('./result');
 
 // Create a WebSocket server on port 8080
 const wss = new WebSocket.Server({ port: 8080 });
@@ -78,7 +80,7 @@ function startNewGame() {
 }
 
 // End the current game
-function endGame() {
+async function endGame() {
   console.log('Ending the game');
   gameActive = false;
 
@@ -88,6 +90,9 @@ function endGame() {
       client.send(JSON.stringify({ type: 'gamestate', isGameActive:gameActive, message: 'The game has ended.' }));
     }
   });
+  await gameResult();
+  gameEnd();
+
 
   // Start a new game after a delay (e.g., 5 seconds after the game ends)
   setTimeout(() => {

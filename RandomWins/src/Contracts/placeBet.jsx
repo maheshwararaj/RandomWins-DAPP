@@ -1,19 +1,18 @@
 import { ethers } from "ethers";
+import Game from "../../../build/contracts/Game.json";
   //To Interect with Deployed contract 
   
   async function placeBet (num) {
+    console.log(num);
     if(window.ethereum){
       const provider=new ethers.providers.Web3Provider(window.ethereum);
-      const contractAddress="0x65Cad9685add8277BB86f081C39bda00a240f5c6";
-      const contractABI=[
-          "function addBet(uint8 _id) payable external"
-      ];
+      const contractAddress=Game.networks[5777].address;
+      const contractABI=Game.abi;
       const signer=provider.getSigner();
-      const contract=ethers.Contract(contractAddress,contractABI,provider);
+      const contract=new ethers.Contract(contractAddress,contractABI,signer);
       try{
-        const amount=ethers.util.parseEther("0.01");
-        const contractSign=contract.connect(signer);
-        const tx=await contractSign.addBet(num,{value:amount});
+        const amount=ethers.utils.parseEther("0.01");
+        const tx=await contract.addBet(1,{value:amount});
         await tx.wait();
       }
       catch(e){
