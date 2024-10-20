@@ -1,43 +1,35 @@
-// BackEnd Here
-const {toEther,contract}=require('./ether');
+const { toEther, contract } = require('./ether');
+const {gameEnd}=require('./result');
 
-const gameData=(luckyNumber,totalBetAmount,winners,share)=>{
-    console.log(share);
-    return{
-        luckyNumber:luckyNumber,
-        totalBetAmount:totalBetAmount,
-        winners:winners,
-        share:share
-    }
-}
+let currentBets = 0;
+const betStats = [0, 0, 0, 0];
 
-let currentData;
-let currentBets;
-const betStats=[0,0,0,0];
-
-const gameStats=(address,betAmount,selectedNumber,noOfbets)=>{
-    betStats[selectedNumber-1]++;
-    currentBets=noOfbets;
+const gameStats = (address, betAmount, selectedNumber, noOfbets) => {
+    betStats[selectedNumber - 1]++;
+    currentBets = noOfbets;
 };
-contract.on("NewBet",(a,b,c,d)=>{
-    // console.log(`Player Address ${a} BetAmount ${toEther(b)} Number ${c} noOfbets ${d}`);
-    currentStats=gameStats(Number(a),toEther(b),Number(c),Number(d));
-    console.log(currentBets);
-})
-contract.on("GameResult", (a, b, c, d) => {
-    // console.log(`luckyNumber ${a} totalBetAmount ${toEther(b)} winners ${c} share ${toEther(d)}`);
-    gameData(Number(a),toEther(b),Number(c),toEther(d));
-    resetBets();
-
-    // console.log(currentData.luckyNumber);
+// execute after all placing new bets
+contract.on("NewBet", (playerAddress, betAmount, selectedNumber, noOfbets) => {
+    gameStats(Number(playerAddress), toEther(betAmount), Number(selectedNumber), Number(noOfbets));
 });
-function resetBets(){
-    for(let i=0;i<4;i++){
-        betStats[i]=0;
-    }
+// execute after game ends
+contract.on("GameResult", (luckyNumber, totalBetAmount, winners, share) => {
+    gameEnd(betStats,currentBets,Number(luckyNumber), toEther(totalBetAmount), Number(winners), toEther(share));
+    resetBets();
+});
+
+function resetBets() {
+    betStats.fill(0);
+    currentBets=0;
+    
 }
 
-module.exports={currentBets,betStats,currentData}
+const getCurrentBets = () => {
+    return currentBets;
+};
 
 
-
+module.exports = {
+    getCurrentBets, // tofetch live no of bets
+    betStats,
+};

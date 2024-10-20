@@ -1,6 +1,7 @@
 const WebSocket = require('ws');
 const {gameResult}=require('./ether');
-const {gameEnd}=require('./result');
+// const {gameEnd}=require('./result');
+
 
 // Create a WebSocket server on port 8080
 const wss = new WebSocket.Server({ port: 8080 });
@@ -91,7 +92,6 @@ async function endGame() {
     }
   });
   await gameResult();
-  gameEnd();
 
 
   // Start a new game after a delay (e.g., 5 seconds after the game ends)
