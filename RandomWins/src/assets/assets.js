@@ -7,22 +7,22 @@ const choices = [
     {
         id:1,
         name:"monkey",
-        image:monkey
+        image:"https://dappluckycontest.s3.ap-southeast-2.amazonaws.com/dappimages/monkey.avif"
     },
     {
         id:2,
         name:"giraffe",
-        image:giraffe
+        image:"https://dappluckycontest.s3.ap-southeast-2.amazonaws.com/dappimages/giraffe.jpg"
     },
     {
         id:3,
         name:"dog",
-        image:dog
+        image:"https://dappluckycontest.s3.ap-southeast-2.amazonaws.com/dappimages/dog.jpg"
     },
     {
         id:4,
         name:"cat",
-        image:cat
+        image:"https://dappluckycontest.s3.ap-southeast-2.amazonaws.com/dappimages/cat.jpeg"
     }
 ]
 

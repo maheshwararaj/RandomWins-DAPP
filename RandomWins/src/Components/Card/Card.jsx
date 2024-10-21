@@ -5,13 +5,13 @@ const Card = ({choice,selected,setSelected}) => {
 
   
   useEffect(()=>{
-    if(selected === choice.name){
+    if(selected === choice.id){
       document.querySelector(".card").classList.add('selected')
     }
   },[])
 
   return (
-    <div className={selected === choice.name ? "card selected" : "card"} onClick={()=>setSelected(choice.name)}>
+    <div className={selected === choice.id ? "card selected" : "card"} onClick={()=>setSelected(choice.id)}>
         <img src={choice.image} alt="" />
         <p>{choice.name}</p>
     </div>
