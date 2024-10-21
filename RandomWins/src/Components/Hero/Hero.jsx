@@ -64,7 +64,7 @@ const Hero = () => {
 
         if(locked=="false"){
           setLocked("true")
-          placeBet(selected)
+          placeBet()
         } 
 
 
