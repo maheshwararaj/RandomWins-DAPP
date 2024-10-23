@@ -1,35 +1,24 @@
 const WebSocket = require('ws');
 const {gameResult}=require('./ether');
-// const {gameEnd}=require('./result');
+const {gameEnd}=require('./result');
+const { getLucky } = require('./server');
 
 
-// Create a WebSocket server on port 8080
-const wss = new WebSocket.Server({ port: 8080 });
+// Create a WebSocket server on port 8090
+const wss = new WebSocket.Server({ port: 8090 });
 
 let clients = [];
+let lucky = 0;
 let gameActive = false;
 let gameStartTime = null;
-const gameDuration = 1 * 60 * 1000;  // 10 minutes in milliseconds
-// let gameChoices = ['Choice 1', 'Choice 2', 'Choice 3', 'Choice 4'];  // The four possible choices
+const gameDuration = 1 * 60 * 1000;  // 1 minute in milliseconds
 
 // When a new client connects
-
 wss.on('connection', (ws) => {
+
   console.log('New client connected');
   clients.push(ws);
-
-  const timeLeft = Math.max(0, gameStartTime + gameDuration - Date.now());
-  ws.send(JSON.stringify({ type:"gamestate", isGameActive : gameActive }));
- 
-
-  // Handle client's choice
-  ws.on('message', (message) => {
-    const data = JSON.parse(message);
-    if (data.type === 'make-choice' && gameActive && data.choice >= 0 && data.choice < gameChoices.length) {
-      console.log(`Client made choice: ${gameChoices[data.choice]}`);
-      ws.send(JSON.stringify({ type: 'confirmation', choice: data.choice, message: 'Your choice has been recorded.' }));
-    }
-  });
+  ws.send(JSON.stringify({ type:"gameState", isGameActive : gameActive }));
 
   // Remove client on disconnect
   ws.on('close', () => {
@@ -55,10 +44,8 @@ function startNewGame() {
   clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN) {
       client.send(JSON.stringify({
-        isGameActive:gameActive,
-        type: 'gamestate',
-        timeLeft: gameDuration / 1000,  // in seconds
-        
+        type: 'gameStart',
+        message:"The game has started"
       }));
     }
   });
@@ -68,7 +55,7 @@ function startNewGame() {
     const timeLeft = Math.max(0, gameStartTime + gameDuration - Date.now());
     clients.forEach(client => {
       if (client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({ type: 'time-left', timeLeft: timeLeft / 1000 }));
+        client.send(JSON.stringify({ type: 'timeLeft', timeLeft: timeLeft / 1000 }));
       }
     });
 
@@ -88,17 +75,31 @@ async function endGame() {
   // Broadcast game over message
   clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(JSON.stringify({ type: 'gamestate', isGameActive:gameActive, message: 'The game has ended.' }));
+      client.send(JSON.stringify({ type: 'gamestate',  message: 'The game has ended.' }));
     }
   });
+
   await gameResult();
+  
+   setTimeout(()=>{
+    lucky = getLucky()
+    clients.forEach(client => {
+    if(client.readyState === WebSocket.OPEN){
+      client.send(JSON.stringify({type:'result',lucky:2}))
+    }
+  })
+  },5000);
+ 
+  
+  
 
 
   // Start a new game after a delay (e.g., 5 seconds after the game ends)
   setTimeout(() => {
     startNewGame();
-  }, 5000);
+  }, 10000);
 }
 
 // Start the first game when the server starts
 startNewGame();
+
