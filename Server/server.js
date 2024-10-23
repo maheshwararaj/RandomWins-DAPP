@@ -1,8 +1,11 @@
+
 const { toEther, contract } = require('./ether');
 const {gameEnd}=require('./result');
 
+
 let currentBets = 0;
 const betStats = [0, 0, 0, 0];
+let lucky = 0 ;
 
 const gameStats = (address, betAmount, selectedNumber, noOfbets) => {
     betStats[selectedNumber - 1]++;
@@ -14,10 +17,15 @@ contract.on("NewBet", (playerAddress, betAmount, selectedNumber, noOfbets) => {
 });
 // execute after game ends
 contract.on("GameResult", (luckyNumber, totalBetAmount, winners, share) => {
+
+
     gameEnd(betStats,currentBets,Number(luckyNumber), toEther(totalBetAmount), Number(winners), toEther(share));
+    lucky = luckyNumber
     resetBets();
 });
-
+function getLucky(){
+    return lucky
+}
 function resetBets() {
     betStats.fill(0);
     currentBets=0;
@@ -32,4 +40,6 @@ const getCurrentBets = () => {
 module.exports = {
     getCurrentBets, // tofetch live no of bets
     betStats,
+    getLucky
 };
+
