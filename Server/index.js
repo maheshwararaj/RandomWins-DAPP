@@ -85,7 +85,7 @@ async function endGame() {
     lucky = getLucky()
     clients.forEach(client => {
     if(client.readyState === WebSocket.OPEN){
-      client.send(JSON.stringify({type:'result',lucky:2}))
+      client.send(JSON.stringify({type:'result',lucky:lucky}))
     }
   })
   },5000);
